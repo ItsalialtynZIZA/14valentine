@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Valentine 💘</title>
+
+  <style>
+    :root{
+      --bg1:#fff0f6;
+      --bg2:#ffe3ec;
+      --card: rgba(255,255,255,.78);
+      --stroke: rgba(255,255,255,.65);
+      --text:#241014;
+      --muted:#6b2b3b;
+
+      --yes1:#ff2d55;
+      --yes2:#ff5c8a;
+
+      --shadow: 0 18px 45px rgba(255, 45, 85, .18);
+      --soft:   0 10px 25px rgba(0,0,0,.08);
+      --radius: 22px;
+
+      /* adaptive knobs */
+      --page-pad-x: 16px;
+      --page-pad-y: 18px;
+      --card-pad: 18px;
+      --gap: 14px;
+      --media-max: 340px;
+      --btn-h: 46px;
+      --btn-max: 180px;
+      --actions-h: 66px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family: ui-rounded, system-ui, -apple-system, "SF Pro Display", "SF Pro Text", Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 520px at 20% 10%, #fff 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(900px 520px at 90% 30%, rgba(255,255,255,.88) 0%, rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x:hidden;
+      overscroll-behavior: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .page{
+      min-height: 100svh;
+      padding:
+        calc(var(--page-pad-y) + env(safe-area-inset-top))
+        calc(var(--page-pad-x) + env(safe-area-inset-right))
+        calc(var(--page-pad-y) + env(safe-area-inset-bottom))
+        calc(var(--page-pad-x) + env(safe-area-inset-left));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .heart{
+      position:absolute;
+      transform: translateY(110vh);
+      animation: floatUp linear infinite;
+      opacity:.22;
+      filter: drop-shadow(0 10px 10px rgba(255,45,85,.14));
+      user-select:none;
+      will-change: transform;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) translateX(0) rotate(0deg); }
+      to{ transform: translateY(-20vh) translateX(36px) rotate(22deg); }
+    }
+
+    .card{
+      width:min(560px, 100%);
+      z-index:1;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--card-pad);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: var(--gap);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      font-weight: 900;
+      font-size: 13px;
+      color: var(--muted);
+      user-select:none;
+      text-align:center;
+    }
+
+    .mediaWrap{
+      width: min(var(--media-max), 88vw);
+      aspect-ratio: 1/1;
+      border-radius: 20px;
+      overflow:hidden;
+      background: rgba(255,255,255,.75);
+      box-shadow: var(--soft);
+      position:relative;
+      isolation:isolate;
+    }
+    .mediaWrap video,
+    .mediaWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .glow{
+      position:absolute;
+      inset:-50px;
+      z-index:1;
+      pointer-events:none;
+      background: radial-gradient(circle at 30% 25%, rgba(255,45,85,.38), rgba(255,255,255,0) 55%);
+      mix-blend-mode: screen;
+    }
+
+    h1{
+      margin:0;
+      text-align:center;
+      font-size: clamp(22px, 5.7vw, 34px);
+      line-height:1.12;
+      letter-spacing:-0.3px;
+    }
+
+    .actions{
+      width:100%;
+      max-width: 420px;
+      height: var(--actions-h);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 12px;
+      position:relative;
+      margin-top: 2px;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 14px;
+      min-height: var(--btn-h);
+      padding: 12px 16px;
+      font-weight: 1000;
+      font-size: 16px;
+      line-height: 1;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      width: 50%;
+      max-width: var(--btn-max);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform-origin:center;
+      transition: transform .14s ease, filter .2s ease;
+      box-shadow: 0 12px 22px rgba(0,0,0,.08);
+      position:relative;
+      overflow:hidden;
+      touch-action: manipulation;
+    }
+    .btn:active{ transform: scale(.98); }
+
+    .btnYes{
+      color:#fff;
+      border: 1px solid rgba(255,255,255,.35);
+      background: linear-gradient(135deg, var(--yes1), var(--yes2));
+      box-shadow: 0 18px 35px rgba(255,45,85,.30);
+    }
+    .btnYes::after{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-30%;
+      width:60%;
+      height:180%;
+      transform: rotate(18deg);
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.38) 50%, rgba(255,255,255,0) 100%);
+      opacity:.0;
+      animation: shimmer 2.4s ease-in-out infinite;
+    }
+    @keyframes shimmer{
+      0%{ transform: translateX(-130%) rotate(18deg); opacity:0; }
+      18%{ opacity:.6; }
+      45%{ opacity:.18; }
+      100%{ transform: translateX(240%) rotate(18deg); opacity:0; }
+    }
+
+    .btnNo{
+      background: rgba(255,255,255,.92);
+      color: var(--text);
+    }
+
+    #noBtn{
+      position:relative;
+      left:0;
+      top:0;
+      transition: left .24s ease, top .24s ease;
+      will-change:left, top;
+    }
+
+    .pulse{
+      animation: pulse 1.0s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ filter: brightness(1); transform: scale(var(--s)); }
+      50%{ filter: brightness(1.08); transform: scale(calc(var(--s) + 0.06)); }
+    }
+
+    .hidden{ display:none !important; }
+
+    .bigYes{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: clamp(68px, 19vw, 160px);
+      font-weight: 1100;
+      letter-spacing:-1px;
+      background: rgba(255,240,246,.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity:0;
+      pointer-events:none;
+      transform: scale(.96);
+      transition: opacity .22s ease, transform .22s ease;
+      z-index:6;
+    }
+    .bigYes.show{ opacity:1; transform: scale(1); }
+
+    .burst{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:5;
+    }
+    .spark{
+      position:absolute;
+      transform: translate(-50%, -50%) scale(.6);
+      opacity:0;
+      animation: pop .95s ease forwards;
+      filter: drop-shadow(0 12px 16px rgba(255,45,85,.14));
+      user-select:none;
+    }
+    @keyframes pop{
+      0%{ opacity:0; transform: translate(-50%, -50%) scale(.55); }
+      14%{ opacity:1; }
+      100%{
+        opacity:0;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.25);
+      }
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 10px 25px rgba(0,0,0,.10);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      color: var(--muted);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 7;
+      user-select:none;
+      text-align:center;
+      max-width: min(92vw, 520px);
+      font-size: 13px;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    /* -------- iPhone tuning (14/15/16/17 classes of sizes) -------- */
+    /* Small-ish (mini/SE class) */
+    @media (max-width: 375px){
+      :root{
+        --page-pad-x: 14px;
+        --page-pad-y: 16px;
+        --card-pad: 16px;
+        --gap: 12px;
+        --media-max: 312px;
+        --btn-max: 168px;
+        --actions-h: 62px;
+      }
+      h1{ font-size: clamp(21px, 6.2vw, 30px); }
+      .badge{ font-size: 12px; }
+    }
+
+    /* Typical iPhone 14/15/16 base width ~390 */
+    @media (min-width: 376px) and (max-width: 414px){
+      :root{
+        --media-max: 330px;
+        --btn-max: 178px;
+      }
+    }
+
+    /* Plus/Max widths (~428/430) */
+    @media (min-width: 415px){
+      :root{
+        --media-max: 360px;
+        --btn-max: 190px;
+        --actions-h: 70px;
+      }
+      .card{ width:min(600px, 100%); }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart, .btnYes::after, .pulse, .spark{ animation: none !important; }
+      #noBtn{ transition: none !important; }
+      .bigYes{ transition:none !important; }
+      .toast{ transition:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" aria-hidden="true" id="hearts"></div>
+
+  <main id="screenAsk" class="page">
+    <section class="card" aria-label="Valentine question">
+      <div class="badge">💌 14 February • Valentine’s Day</div>
+
+      <div class="mediaWrap">
+        <video id="mainVideo" autoplay muted loop playsinline
+          poster="https://i.pinimg.com/736x/c2/09/1c/c2091c0f7727e7bfa3e94696cbe5c25f.jpg">
+          <source src="14.mp4" type="video/mp4">
+        </video>
+        <div class="glow"></div>
+      </div>
+
+      <h1>Will you be my valentine? 💘</h1>
+
+      <div class="actions" aria-label="Buttons">
+        <button id="yesBtn" class="btn btnYes" type="button">Да</button>
+        <button id="noBtn" class="btn btnNo" type="button">Нет</button>
+      </div>
+    </section>
+  </main>
+
+  <main id="screenYay" class="page hidden">
+    <section class="card" aria-label="Success screen">
+      <div class="badge">💖 It’s a date!</div>
+
+      <div class="mediaWrap">
+        <img id="yayImg" src="png/photo.png" alt="photo"
+             style="opacity:0;transform:scale(.985);transition:opacity .28s ease, transform .28s ease;">
+        <div class="glow"></div>
+      </div>
+
+      <h1>YAYYY! 💝</h1>
+    </section>
+  </main>
+
+  <div class="burst" id="burst" aria-hidden="true"></div>
+  <div class="bigYes" id="bigYes" aria-hidden="true">YES</div>
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const screenAsk = document.getElementById("screenAsk");
+      const screenYay = document.getElementById("screenYay");
+
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+
+      const hearts = document.getElementById("hearts");
+      const burst = document.getElementById("burst");
+      const bigYes = document.getElementById("bigYes");
+      const toast = document.getElementById("toast");
+
+      function spawnHearts(count = 18) {
+        const symbols = ["💗","💖","💘","💞","💕","💓"];
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement("div");
+          el.className = "heart";
+          el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          el.style.left = (Math.random() * 100) + "vw";
+          el.style.animationDuration = (8 + Math.random() * 11) + "s";
+          el.style.animationDelay = (-Math.random() * 12) + "s";
+          el.style.fontSize = (14 + Math.random() * 22) + "px";
+          el.style.opacity = (0.14 + Math.random() * 0.22).toFixed(2);
+          hearts.appendChild(el);
+        }
+      }
+      spawnHearts();
+
+      let toastT = null;
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toastT);
+        toastT = setTimeout(() => toast.classList.remove("show"), 900);
+      }
+
+      let yesScale = 1;
+      let noCount = 0;
+
+      function nextYesScale(cur, n){
+        const step = 0.12 + Math.min(0.20, n * 0.012);
+        return cur + step;
+      }
+
+      const YES_MAX = 3.2;
+
+      function setYesScale(s) {
+        yesBtn.style.setProperty("--s", s.toFixed(3));
+        yesBtn.style.transform = `scale(${s})`;
+      }
+
+      function viewportSize() {
+        const vv = window.visualViewport;
+        return {
+          w: vv ? vv.width : window.innerWidth,
+          h: vv ? vv.height : window.innerHeight
+        };
+      }
+
+      function moveNoRandom() {
+        const { w: viewportW, h: viewportH } = viewportSize();
+
+        const rect = noBtn.getBoundingClientRect();
+        const btnW = rect.width;
+        const btnH = rect.height;
+
+        const pad = 10;
+        const minX = pad;
+        const maxX = viewportW - pad - btnW;
+
+        const minY = pad;
+        const maxY = viewportH - pad - btnH;
+
+        const targetX = Math.random() * (maxX - minX) + minX;
+        const targetY = Math.random() * (maxY - minY) + minY;
+
+        const dx = targetX - rect.left;
+        const dy = targetY - rect.top;
+
+        noBtn.style.left = dx + "px";
+        noBtn.style.top  = dy + "px";
+      }
+
+      function miniBurstAt(x, y, amount = 8) {
+        const symbols = ["💘","💝","💖","💗","💕","💞"];
+        for (let i = 0; i < amount; i++) {
+          const s = document.createElement("div");
+          s.className = "spark";
+          s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          s.style.left = x + "px";
+          s.style.top  = y + "px";
+          s.style.setProperty("--dx", (Math.random() * 180 - 90).toFixed(0) + "px");
+          s.style.setProperty("--dy", (Math.random() * 190 - 95).toFixed(0) + "px");
+          s.style.animationDelay = (Math.random() * 0.10).toFixed(2) + "s";
+          s.style.fontSize = (14 + Math.random() * 16).toFixed(0) + "px";
+          burst.appendChild(s);
+          setTimeout(() => s.remove(), 1100);
+        }
+      }
+
+      function onNo(e) {
+        e.preventDefault();
+
+        noCount++;
+
+        const dur = Math.max(110, 240 - Math.floor(noCount * 10));
+        noBtn.style.transitionDuration = dur + "ms";
+
+        moveNoRandom();
+
+        yesScale = Math.min(YES_MAX, nextYesScale(yesScale, noCount));
+        setYesScale(yesScale);
+
+        if (yesScale >= 1.55) yesBtn.classList.add("pulse");
+
+        const r = yesBtn.getBoundingClientRect();
+        miniBurstAt(r.left + r.width/2, r.top + r.height/2, 6);
+
+        if (noCount === 3) showToast("😈 “Нет” уже устает…");
+        if (noCount === 6) showToast("💗 “Да” становится сильнее!");
+        if (noCount === 10) showToast("💘 Просто нажми “Да” 😄");
+      }
+
+      noBtn.addEventListener("pointerdown", onNo);
+      noBtn.addEventListener("click", onNo);
+
+      function resetNoPosition() {
+        noBtn.style.left = "0px";
+        noBtn.style.top  = "0px";
+      }
+      window.addEventListener("resize", resetNoPosition);
+      window.addEventListener("orientationchange", resetNoPosition);
+      if (window.visualViewport) window.visualViewport.addEventListener("resize", resetNoPosition);
+
+      function burstHeartsCenter() {
+        burst.innerHTML = "";
+        const symbols = ["💘","💝","💖","💗","💕","💞"];
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+
+        for (let i = 0; i < 24; i++) {
+          const s = document.createElement("div");
+          s.className = "spark";
+          s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          s.style.left = cx + "px";
+          s.style.top  = cy + "px";
+          s.style.setProperty("--dx", (Math.random() * 320 - 160).toFixed(0) + "px");
+          s.style.setProperty("--dy", (Math.random() * 330 - 165).toFixed(0) + "px");
+          s.style.animationDelay = (Math.random() * 0.14).toFixed(2) + "s";
+          s.style.fontSize = (16 + Math.random() * 22).toFixed(0) + "px";
+          burst.appendChild(s);
+        }
+        setTimeout(() => { burst.innerHTML = ""; }, 1400);
+      }
+
+      yesBtn.addEventListener("click", () => {
+        bigYes.classList.add("show");
+        showToast("💖 Y E S !");
+        burstHeartsCenter();
+
+        setTimeout(() => {
+          bigYes.classList.remove("show");
+          screenAsk.classList.add("hidden");
+          screenYay.classList.remove("hidden");
+          resetNoPosition();
+          window.scrollTo({ top: 0, behavior: "instant" });
+
+          const yayImg = document.getElementById("yayImg");
+          if (yayImg) requestAnimationFrame(() => {
+            yayImg.style.opacity = "1";
+            yayImg.style.transform = "scale(1)";
+          });
+        }, 680);
+      });
+
+      setYesScale(yesScale);
+    })();
+  </script>
+</body>
+</html>
